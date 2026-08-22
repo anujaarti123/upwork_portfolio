@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Briefcase, Github, Linkedin, MessageCircle } from "lucide-react";
+import { Briefcase, Code2, Link, MessageCircle } from "lucide-react";
 import type { AboutHighlight, AboutSection, SectionLabels } from "@/types/cms";
 import { CmsImage } from "@/components/ui/cms-image";
 
@@ -12,9 +12,9 @@ interface AboutSectionProps {
 }
 
 const socialConfig = [
-  { key: "linkedin_url" as const, label: "LinkedIn", icon: Linkedin },
+  { key: "linkedin_url" as const, label: "LinkedIn", icon: Link },
   { key: "upwork_url" as const, label: "Upwork", icon: Briefcase },
-  { key: "github_url" as const, label: "GitHub", icon: Github },
+  { key: "github_url" as const, label: "GitHub", icon: Code2 },
   { key: "whatsapp_url" as const, label: "WhatsApp", icon: MessageCircle },
 ];
 
