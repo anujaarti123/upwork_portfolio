@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Navbar } from "@/components/layout/navbar";
 import { DynamicFavicon } from "@/components/layout/dynamic-favicon";
 import { HeroSectionView } from "@/components/sections/hero-section";
+import { AboutSectionView } from "@/components/sections/about-section";
 import { EcosystemSection } from "@/components/sections/ecosystem-section";
 import { CaseStudiesSection } from "@/components/sections/case-studies-section";
 import { TechStackSection } from "@/components/sections/tech-stack-section";
@@ -13,7 +14,7 @@ export const revalidate = REVALIDATE_SECONDS;
 
 export default async function HomePage() {
   const siteData = (await getSiteData()) ?? DEFAULT_SITE_DATA;
-  const { settings, hero, metrics, projects, caseStudies, techTags, footer, socialLinks } =
+  const { settings, hero, metrics, about, aboutHighlights, projects, caseStudies, techTags, footer, socialLinks } =
     siteData;
 
   return (
@@ -23,6 +24,9 @@ export default async function HomePage() {
       <main>
         {settings.show_hero && (
           <HeroSectionView hero={hero} metrics={metrics} />
+        )}
+        {settings.show_about && (
+          <AboutSectionView about={about} highlights={aboutHighlights} labels={settings.section_labels} />
         )}
         {settings.show_ecosystem && (
           <EcosystemSection projects={projects} labels={settings.section_labels} />

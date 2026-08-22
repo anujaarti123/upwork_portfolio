@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Project, SiteData, TechStackTag } from "@/types/cms";
+import type { CaseStudy, Project, SiteData, TechStackTag } from "@/types/cms";
 import { normalizeMediaUrl } from "@/lib/storage";
 import { DEFAULT_SITE_DATA } from "./defaults";
 
@@ -52,6 +52,13 @@ function normalizeSettingsUrls(settings: ReturnType<typeof normalizeSettings>) {
   };
 }
 
+function mapCaseStudies(studies: CaseStudy[] | null): CaseStudy[] {
+  return (studies ?? []).map((study) => ({
+    ...study,
+    client_logo_url: normalizeMediaUrl(study.client_logo_url),
+  }));
+}
+
 export async function getSiteData(): Promise<SiteData | null> {
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     return null;
@@ -63,6 +70,8 @@ export async function getSiteData(): Promise<SiteData | null> {
     settingsRes,
     heroRes,
     metricsRes,
+    aboutRes,
+    aboutHighlightsRes,
     projectsRes,
     caseStudiesRes,
     techTagsRes,
@@ -72,6 +81,8 @@ export async function getSiteData(): Promise<SiteData | null> {
     supabase.from("site_settings").select("*").limit(1).single(),
     supabase.from("hero_section").select("*").limit(1).single(),
     supabase.from("hero_metrics").select("*").order("sort_order"),
+    supabase.from("about_section").select("*").limit(1).single(),
+    supabase.from("about_highlights").select("*").order("sort_order"),
     supabase
       .from("projects")
       .select("*, project_screenshots(*), project_tags(tag_id, tech_stack_tags(*))")
@@ -102,8 +113,15 @@ export async function getSiteData(): Promise<SiteData | null> {
       background_video_url: heroRes.data.background_video_url,
     },
     metrics: metricsRes.data ?? [],
+    about: aboutRes.data
+      ? {
+          ...aboutRes.data,
+          profile_photo_url: normalizeMediaUrl(aboutRes.data.profile_photo_url),
+        }
+      : DEFAULT_SITE_DATA.about,
+    aboutHighlights: aboutHighlightsRes.data ?? DEFAULT_SITE_DATA.aboutHighlights,
     projects: mapProjects(projectsRes),
-    caseStudies: caseStudiesRes.data ?? [],
+    caseStudies: mapCaseStudies(caseStudiesRes.data),
     techTags: techTagsRes.data ?? [],
     footer: footerRes.data ?? DEFAULT_SITE_DATA.footer,
     socialLinks: socialRes.data ?? [],
@@ -121,6 +139,8 @@ export async function getAdminSiteData(): Promise<SiteData | null> {
     settingsRes,
     heroRes,
     metricsRes,
+    aboutRes,
+    aboutHighlightsRes,
     projectsRes,
     caseStudiesRes,
     techTagsRes,
@@ -130,6 +150,8 @@ export async function getAdminSiteData(): Promise<SiteData | null> {
     supabase.from("site_settings").select("*").limit(1).single(),
     supabase.from("hero_section").select("*").limit(1).single(),
     supabase.from("hero_metrics").select("*").order("sort_order"),
+    supabase.from("about_section").select("*").limit(1).single(),
+    supabase.from("about_highlights").select("*").order("sort_order"),
     supabase
       .from("projects")
       .select("*, project_screenshots(*), project_tags(tag_id, tech_stack_tags(*))")
@@ -151,8 +173,15 @@ export async function getAdminSiteData(): Promise<SiteData | null> {
       background_video_url: heroRes.data.background_video_url,
     },
     metrics: metricsRes.data ?? [],
+    about: aboutRes.data
+      ? {
+          ...aboutRes.data,
+          profile_photo_url: normalizeMediaUrl(aboutRes.data.profile_photo_url),
+        }
+      : DEFAULT_SITE_DATA.about,
+    aboutHighlights: aboutHighlightsRes.data ?? DEFAULT_SITE_DATA.aboutHighlights,
     projects: mapProjects(projectsRes),
-    caseStudies: caseStudiesRes.data ?? [],
+    caseStudies: mapCaseStudies(caseStudiesRes.data),
     techTags: techTagsRes.data ?? [],
     footer: footerRes.data ?? DEFAULT_SITE_DATA.footer,
     socialLinks: socialRes.data ?? [],

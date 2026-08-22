@@ -1,6 +1,8 @@
 export interface SectionLabels {
   ecosystem_label: string;
   ecosystem_title: string;
+  about_label: string;
+  about_title: string;
   case_studies_label: string;
   case_studies_title: string;
   tech_stack_label: string;
@@ -19,6 +21,7 @@ export interface SiteSettings {
   logo_url: string | null;
   favicon_url: string | null;
   show_hero: boolean;
+  show_about: boolean;
   show_ecosystem: boolean;
   show_case_studies: boolean;
   show_tech_stack: boolean;
@@ -117,10 +120,32 @@ export interface SocialLink {
   is_visible: boolean;
 }
 
+export interface AboutSection {
+  id: string;
+  full_name: string;
+  role_tagline: string | null;
+  profile_photo_url: string | null;
+  availability_status: string | null;
+  bio: string | null;
+  linkedin_url: string | null;
+  upwork_url: string | null;
+  github_url: string | null;
+  whatsapp_url: string | null;
+  updated_at: string;
+}
+
+export interface AboutHighlight {
+  id: string;
+  label: string;
+  sort_order: number;
+}
+
 export interface SiteData {
   settings: SiteSettings;
   hero: HeroSection;
   metrics: HeroMetric[];
+  about: AboutSection;
+  aboutHighlights: AboutHighlight[];
   projects: Project[];
   caseStudies: CaseStudy[];
   techTags: TechStackTag[];

@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS site_settings (
   logo_url          TEXT,
   favicon_url       TEXT,
   show_hero         BOOLEAN NOT NULL DEFAULT TRUE,
+  show_about        BOOLEAN NOT NULL DEFAULT TRUE,
   show_ecosystem    BOOLEAN NOT NULL DEFAULT TRUE,
   show_case_studies BOOLEAN NOT NULL DEFAULT TRUE,
   show_tech_stack   BOOLEAN NOT NULL DEFAULT TRUE,
@@ -24,11 +25,14 @@ CREATE TABLE IF NOT EXISTS site_settings (
   section_labels    JSONB NOT NULL DEFAULT '{
     "ecosystem_label": "Portfolio",
     "ecosystem_title": "Product Ecosystem",
+    "about_label": "About",
+    "about_title": "Architect Introduction",
     "case_studies_label": "Proof",
     "case_studies_title": "Client Success Stories",
     "tech_stack_label": "Stack",
     "tech_stack_title": "Technologies We Master",
     "nav_links": [
+      {"href": "#about", "label": "About"},
       {"href": "#ecosystem", "label": "Portfolio"},
       {"href": "#case-studies", "label": "Case Studies"},
       {"href": "#tech-stack", "label": "Tech Stack"},
@@ -129,6 +133,28 @@ CREATE TABLE IF NOT EXISTS footer_settings (
   updated_at        TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- ── About / Architect Introduction (singleton) ────────────────
+CREATE TABLE IF NOT EXISTS about_section (
+  id                  UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  full_name           TEXT NOT NULL DEFAULT 'Anuj Kumar',
+  role_tagline        TEXT DEFAULT 'Jewellery ERP Architect • Full-Stack Engineer • Founder, GoldNest AI',
+  profile_photo_url   TEXT,
+  availability_status TEXT DEFAULT 'Available for Architecture & Consulting',
+  bio                 TEXT DEFAULT 'Deep domain expertise in Jewellery Tech, Cloud Architecture, and Automation — building enterprise-grade ERP systems, SaaS platforms, and AI-driven workflows for jewellers worldwide.',
+  linkedin_url        TEXT,
+  upwork_url          TEXT,
+  github_url          TEXT,
+  whatsapp_url        TEXT,
+  updated_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS about_highlights (
+  id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  label       TEXT NOT NULL,
+  sort_order  INT  NOT NULL DEFAULT 0,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- ── Social Links ──────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS social_links (
   id          UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -149,6 +175,8 @@ ALTER TABLE project_screenshots ENABLE ROW LEVEL SECURITY;
 ALTER TABLE project_tags        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE case_studies        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE footer_settings     ENABLE ROW LEVEL SECURITY;
+ALTER TABLE about_section       ENABLE ROW LEVEL SECURITY;
+ALTER TABLE about_highlights    ENABLE ROW LEVEL SECURITY;
 ALTER TABLE social_links        ENABLE ROW LEVEL SECURITY;
 
 -- Public read policies
@@ -161,6 +189,8 @@ CREATE POLICY "Public read project_screenshots" ON project_screenshots FOR SELEC
 CREATE POLICY "Public read project_tags"        ON project_tags        FOR SELECT USING (true);
 CREATE POLICY "Public read case_studies"        ON case_studies        FOR SELECT USING (is_published = true);
 CREATE POLICY "Public read footer_settings"     ON footer_settings     FOR SELECT USING (true);
+CREATE POLICY "Public read about_section"       ON about_section       FOR SELECT USING (true);
+CREATE POLICY "Public read about_highlights"    ON about_highlights    FOR SELECT USING (true);
 CREATE POLICY "Public read social_links"        ON social_links        FOR SELECT USING (is_visible = true);
 
 -- Authenticated write policies (admin)
@@ -173,6 +203,8 @@ CREATE POLICY "Admin write project_screenshots" ON project_screenshots FOR ALL U
 CREATE POLICY "Admin write project_tags"        ON project_tags        FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin write case_studies"        ON case_studies        FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin write footer_settings"     ON footer_settings     FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin write about_section"       ON about_section       FOR ALL USING (auth.role() = 'authenticated');
+CREATE POLICY "Admin write about_highlights"    ON about_highlights    FOR ALL USING (auth.role() = 'authenticated');
 CREATE POLICY "Admin write social_links"        ON social_links        FOR ALL USING (auth.role() = 'authenticated');
 
 -- ── Storage Bucket for CMS uploads ───────────────────────────
@@ -184,6 +216,14 @@ INSERT INTO site_settings (id) VALUES (uuid_generate_v4()) ON CONFLICT DO NOTHIN
 INSERT INTO hero_section (id) VALUES (uuid_generate_v4()) ON CONFLICT DO NOTHING;
 
 INSERT INTO footer_settings (id) VALUES (uuid_generate_v4()) ON CONFLICT DO NOTHING;
+
+INSERT INTO about_section (id) VALUES (uuid_generate_v4()) ON CONFLICT DO NOTHING;
+
+INSERT INTO about_highlights (label, sort_order) VALUES
+  ('100+ Active Users', 0),
+  ('20+ SaaS Jewellers', 1),
+  ('AWS & Flutter Expert', 2),
+  ('Enterprise ERP Architect', 3);
 
 INSERT INTO hero_metrics (label, value, icon, sort_order) VALUES
   ('Projects Delivered', '50+', 'rocket', 0),

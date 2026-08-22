@@ -1,10 +1,10 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import { Quote } from "lucide-react";
 import type { CaseStudy, SectionLabels } from "@/types/cms";
 import { Card, CardContent } from "@/components/ui/card";
+import { CmsImage } from "@/components/ui/cms-image";
 
 interface CaseStudiesSectionProps {
   caseStudies: CaseStudy[];
@@ -41,12 +41,12 @@ export function CaseStudiesSection({ caseStudies, labels }: CaseStudiesSectionPr
                 <CardContent className="p-8">
                   <div className="flex items-center gap-4 mb-6">
                     {study.client_logo_url && (
-                      <Image
+                      <CmsImage
                         src={study.client_logo_url}
                         alt={study.client_name}
                         width={48}
                         height={48}
-                        className="rounded-lg"
+                        className="h-12 w-12 rounded-lg object-cover shrink-0"
                       />
                     )}
                     <div>

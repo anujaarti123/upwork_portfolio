@@ -139,6 +139,7 @@ export function CaseStudiesManager() {
               label="Client Logo"
               value={editing.client_logo_url ?? null}
               onChange={(url) => setEditing({ ...editing, client_logo_url: url })}
+              folder="branding"
             />
             <div className="flex items-center gap-2">
               <Switch

@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { normalizeMediaUrl } from "@/lib/storage";
 import type {
+  AboutHighlight,
+  AboutSection,
   CaseStudy,
   FooterSettings,
   HeroMetric,
@@ -235,6 +237,60 @@ export async function upsertTechTag(tag: Partial<TechStackTag> & { id?: string }
 export async function deleteTechTag(id: string) {
   const supabase = await requireAuth();
   const { error } = await supabase.from("tech_stack_tags").delete().eq("id", id);
+  if (error) throw new Error(error.message);
+  revalidateAll();
+  return { success: true };
+}
+
+export async function updateAboutSection(data: Partial<AboutSection>) {
+  const supabase = await requireAuth();
+  const { data: existing } = await supabase
+    .from("about_section")
+    .select("id")
+    .limit(1)
+    .single();
+
+  if (!existing) {
+    const { error } = await supabase.from("about_section").insert({
+      ...data,
+      updated_at: new Date().toISOString(),
+    });
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supabase
+      .from("about_section")
+      .update({ ...data, updated_at: new Date().toISOString() })
+      .eq("id", existing.id);
+    if (error) throw new Error(error.message);
+  }
+
+  revalidateAll();
+  return { success: true };
+}
+
+export async function upsertAboutHighlight(
+  highlight: Partial<AboutHighlight> & { id?: string }
+) {
+  const supabase = await requireAuth();
+
+  if (highlight.id) {
+    const { error } = await supabase
+      .from("about_highlights")
+      .update(highlight)
+      .eq("id", highlight.id);
+    if (error) throw new Error(error.message);
+  } else {
+    const { error } = await supabase.from("about_highlights").insert(highlight);
+    if (error) throw new Error(error.message);
+  }
+
+  revalidateAll();
+  return { success: true };
+}
+
+export async function deleteAboutHighlight(id: string) {
+  const supabase = await requireAuth();
+  const { error } = await supabase.from("about_highlights").delete().eq("id", id);
   if (error) throw new Error(error.message);
   revalidateAll();
   return { success: true };

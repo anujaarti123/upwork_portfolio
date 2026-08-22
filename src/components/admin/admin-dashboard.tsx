@@ -13,6 +13,7 @@ import { SectionManager } from "./section-manager";
 import { ProjectsManager } from "./projects-manager";
 import { CaseStudiesManager } from "./case-studies-manager";
 import { FooterEditor } from "./footer-editor";
+import { AboutEditor } from "./about-editor";
 
 interface AdminDashboardProps {
   initialData: SiteData;
@@ -81,6 +82,7 @@ export function AdminDashboard({ initialData }: AdminDashboardProps) {
         <Tabs defaultValue="hero">
           <TabsList className="flex flex-wrap h-auto gap-1">
             <TabsTrigger value="hero">Hero Editor</TabsTrigger>
+            <TabsTrigger value="about">About & Intro Editor</TabsTrigger>
             <TabsTrigger value="styling">Section & Styling</TabsTrigger>
             <TabsTrigger value="projects">Portfolio CMS</TabsTrigger>
             <TabsTrigger value="case-studies">Case Studies</TabsTrigger>
@@ -89,6 +91,9 @@ export function AdminDashboard({ initialData }: AdminDashboardProps) {
 
           <TabsContent value="hero">
             <HeroEditor />
+          </TabsContent>
+          <TabsContent value="about">
+            <AboutEditor />
           </TabsContent>
           <TabsContent value="styling">
             <SectionManager />

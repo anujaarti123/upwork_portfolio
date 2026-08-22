@@ -9,6 +9,7 @@ interface NavbarProps {
 }
 
 const sectionVisibility: Record<string, keyof SiteSettings> = {
+  "#about": "show_about",
   "#ecosystem": "show_ecosystem",
   "#case-studies": "show_case_studies",
   "#tech-stack": "show_tech_stack",

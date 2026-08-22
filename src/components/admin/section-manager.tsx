@@ -37,6 +37,7 @@ export function SectionManager() {
 
   const toggles = [
     { key: "show_hero" as const, label: "Hero Section" },
+    { key: "show_about" as const, label: "About / Architect Intro" },
     { key: "show_ecosystem" as const, label: "Ecosystem / Portfolio" },
     { key: "show_case_studies" as const, label: "Case Studies" },
     { key: "show_tech_stack" as const, label: "Tech Stack" },
@@ -133,6 +134,8 @@ export function SectionManager() {
           {[
             { key: "ecosystem_label" as const, label: "Ecosystem Label" },
             { key: "ecosystem_title" as const, label: "Ecosystem Title" },
+            { key: "about_label" as const, label: "About Label" },
+            { key: "about_title" as const, label: "About Title" },
             { key: "case_studies_label" as const, label: "Case Studies Label" },
             { key: "case_studies_title" as const, label: "Case Studies Title" },
             { key: "tech_stack_label" as const, label: "Tech Stack Label" },
