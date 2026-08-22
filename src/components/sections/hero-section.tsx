@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import type { HeroMetric, HeroSection, SiteSettings } from "@/types/cms";
+import type { HeroMetric, HeroSection } from "@/types/cms";
 import { Button } from "@/components/ui/button";
 import { CmsImage } from "@/components/ui/cms-image";
 import { getIcon } from "@/lib/icons";
@@ -11,10 +11,9 @@ import { getIcon } from "@/lib/icons";
 interface HeroSectionProps {
   hero: HeroSection;
   metrics: HeroMetric[];
-  settings: SiteSettings;
 }
 
-export function HeroSectionView({ hero, metrics, settings }: HeroSectionProps) {
+export function HeroSectionView({ hero, metrics }: HeroSectionProps) {
   const [typedIndex, setTypedIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);

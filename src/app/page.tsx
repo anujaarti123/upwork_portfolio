@@ -22,7 +22,7 @@ export default async function HomePage() {
       <Navbar settings={settings} />
       <main>
         {settings.show_hero && (
-          <HeroSectionView hero={hero} metrics={metrics} settings={settings} />
+          <HeroSectionView hero={hero} metrics={metrics} />
         )}
         {settings.show_ecosystem && (
           <EcosystemSection projects={projects} labels={settings.section_labels} />

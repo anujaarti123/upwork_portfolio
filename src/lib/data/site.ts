@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Project, ProjectMediaInput, SiteData, TechStackTag } from "@/types/cms";
+import type { Project, SiteData, TechStackTag } from "@/types/cms";
 import { normalizeMediaUrl } from "@/lib/storage";
 import { DEFAULT_SITE_DATA } from "./defaults";
 

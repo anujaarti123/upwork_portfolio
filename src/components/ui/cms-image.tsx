@@ -53,27 +53,26 @@ export function CmsImage({
     );
   }
 
-  const imgProps = {
-    src: resolved,
-    alt,
-    loading: (priority ? "eager" : "lazy") as "eager" | "lazy",
-    onError: () => setFailed(true),
-  };
-
   if (fill) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
+      // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
       <img
-        {...imgProps}
+        src={resolved}
+        alt={alt}
+        loading={priority ? "eager" : "lazy"}
+        onError={() => setFailed(true)}
         className={cn("absolute inset-0 h-full w-full object-cover", className)}
       />
     );
   }
 
   return (
-    // eslint-disable-next-line @next/next/no-img-element
+    // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
     <img
-      {...imgProps}
+      src={resolved}
+      alt={alt}
+      loading={priority ? "eager" : "lazy"}
+      onError={() => setFailed(true)}
       width={width}
       height={height}
       className={className}

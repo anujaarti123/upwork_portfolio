@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import type { Project, SectionLabels } from "@/types/cms";
 import { CmsImage } from "@/components/ui/cms-image";
