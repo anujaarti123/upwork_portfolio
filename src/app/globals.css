@@ -3,21 +3,35 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary-accent: #D4AF37;
+  --secondary-accent: #10B981;
+  --background: #0A0A0C;
+  --foreground: #F5F5F5;
+  --card-fill: #141418;
+  --primary-rgb: 212, 175, 55;
+  --secondary-rgb: 16, 185, 129;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-white/10;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] antialiased;
+    font-family: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .glass-card {
+    background-color: color-mix(in srgb, var(--card-fill) 60%, transparent);
+    @apply backdrop-blur-xl border border-white/10;
+  }
 }
 
 @layer utilities {
